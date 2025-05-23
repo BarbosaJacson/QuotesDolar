@@ -4,41 +4,38 @@ import java.util.List;
 
 public class OHLC {
 
-    private LocalDateTime data;
-    private double abertura;
-    private double maxima;
-    private double minima;
-    private double fechamento;
+    private LocalDateTime date;
+    private double Open;
+    private double Highest;
+    private double Lowest;
+    private double Closing;
 
-    public OHLC(LocalDateTime data, double abertura, double maxima, double minima, double fechamento) {
-        this.data = data;
-        this.abertura = abertura;
-        this.maxima = maxima;
-        this.minima = minima;
-        this.fechamento = fechamento;
-    }
-    OHLCManager ohlcManager = new OHLCManager(new ArrayList<>());
-
-    public LocalDateTime getData() {
-        return data;
+    public OHLC(LocalDateTime date, double open, double highest, double lowest, double closing) {
+        this.date = date;
+        Open = open;
+        Highest = highest;
+        Lowest = lowest;
+        Closing = closing;
     }
 
-    public double getAbertura() {
-        return abertura;
+      public LocalDateTime getDate() {
+        return date;
     }
 
-    public double getMaxima() {
-        return maxima;
+    public double getOpen() {
+        return Open;
     }
 
-    public double getMinima() {
-        return minima;
+    public double getHighest() {
+        return Highest;
     }
 
-    public double getFechamento() {
-        return fechamento;
+    public double getLowest() {
+        return Lowest;
     }
 
-
+    public double getClosing() {
+        return Closing;
+    }
 
 }

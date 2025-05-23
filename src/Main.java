@@ -14,31 +14,31 @@ public class Main {
         try {
             connection = DB.getConnection();
             st = connection.createStatement();
-            rs = st.executeQuery("SELECT Data, Abertura, Máxima, Mínima, " +
-                    "Fechamento FROM dollar_quotes_db.dolar ORDER BY Data DESC LIMIT 140");
-            DateTimeFormatter sdfInput = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            rs = st.executeQuery("SELECT Date, Open, Highest, Lowest, " +
+                    "Closing FROM dollar_quotes_db.dolar ORDER BY Date DESC");
+            DateTimeFormatter sdfInput = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             DateTimeFormatter sdfOutput = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            List<OHLC> cotacoes = new ArrayList<>();
+            List<OHLC> quotes = new ArrayList<>();
             int rowCount = 0;
             while (rs.next()) {
                 rowCount++;
-                String dataStr = rs.getString("Data");
-                LocalDateTime localDateTime = LocalDateTime.parse(dataStr, sdfInput);
-                double abertura = rs.getDouble("Abertura");
-                double maxima = rs.getDouble("Máxima");
-                double minima = rs.getDouble("Mínima");
-                double fechamento = rs.getDouble("Fechamento");
+                String dateStr = rs.getString("Date");
+                LocalDateTime localDateTime = LocalDateTime.parse(dateStr, sdfInput);
+                double Open = rs.getDouble("Open");
+                double Highest = rs.getDouble("Highest");
+                double Lowest = rs.getDouble("Lowest");
+                double Closing = rs.getDouble("Closing");
                 String formattedDate = localDateTime.format(sdfOutput);
-                System.out.printf("Linha %d: %s | %.2f | %.2f | %.2f | %.2f%n",
-                        rowCount, formattedDate, abertura, maxima, minima, fechamento);
+                System.out.printf("Line %d: %s | %.2f | %.2f | %.2f | %.2f%n",
+                        rowCount, formattedDate, Open, Highest, Lowest, Closing);
 
-                OHLC ohlc = new OHLC(localDateTime, abertura, maxima, minima, fechamento);
-                cotacoes.add(ohlc);
+                OHLC ohlc = new OHLC(localDateTime, Open, Highest, Lowest, Closing);
+                quotes.add(ohlc);
                                             }
-            System.out.println("Total de linhas processadas: " + rowCount);
-            OHLCManager manager = new OHLCManager(cotacoes);
-            double mediaMovel = manager.calcularMediaMovel(115);
-            System.out.printf("Média móvel inicial (115 períodos): %.2f%n", mediaMovel);
+            System.out.println("Total line processed: " + rowCount);
+            OHLCManager manager = new OHLCManager(quotes);
+            double movingAverage = manager.calculateMovingAverage(115);
+            System.out.printf("Moving Average (115 period): %.2f%n", movingAverage);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
